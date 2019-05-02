@@ -19,6 +19,7 @@ func init() {
 // Pin defines the hardware pin which we are sending bits on
 var Pin interface {
 	FastOut(gpio.Level)
+	Out(gpio.Level) error
 }
 
 var state gpio.Level
@@ -27,6 +28,14 @@ var state gpio.Level
 // at about 1200 baud - i just used my hands on these functions
 // until their output looked like a reference trace on a scope :)
 func ShipPayload(input []byte, repeat int) error {
+
+	// ensure we start off low
+	state = gpio.Low
+
+	// Out pulls the pin low - but it also ensures this
+	// pin is configured as an output
+	Pin.Out(gpio.Low)
+
 	// 430us is the lowest possible pulse we need
 	t := time.NewTicker(430 * time.Microsecond)
 
