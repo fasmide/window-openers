@@ -1,6 +1,7 @@
 package manchester
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -34,7 +35,10 @@ func ShipPayload(input []byte, repeat int) error {
 
 	// Out pulls the pin low - but it also ensures this
 	// pin is configured as an output
-	Pin.Out(gpio.Low)
+	err := Pin.Out(gpio.Low)
+	if err != nil {
+		return fmt.Errorf("could not configure and pull pin low: %s", err)
+	}
 
 	// 430us is the lowest possible pulse we need
 	t := time.NewTicker(430 * time.Microsecond)
@@ -65,6 +69,12 @@ func ShipPayload(input []byte, repeat int) error {
 
 	<-t.C
 	t.Stop()
+
+	// we should not return from this function unless
+	// we are in low state
+	Pin.FastOut(gpio.Low)
+	state = gpio.Low
+
 	return nil
 }
 
