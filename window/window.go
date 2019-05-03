@@ -1,5 +1,7 @@
 package window
 
+import "fmt"
+
 // Various command bits we need
 const openCmd = 136 // 10001000
 const stopCmd = 72  // 01001000
@@ -12,6 +14,15 @@ type Window struct {
 	ID []byte
 
 	Radio func([]byte) error
+}
+
+// VerifyID checks for a correct ID
+func (w *Window) VerifyID() error {
+	if len(w.ID) != 5 {
+		return fmt.Errorf("wrong ID length: %d, should be exactly 5 bytes", len(w.ID))
+	}
+
+	return nil
 }
 
 // Pair is just a convenience method of calling "Open"
