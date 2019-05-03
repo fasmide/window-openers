@@ -9,6 +9,15 @@ import (
 	"periph.io/x/periph/host"
 )
 
+// Repeats sets a default payload repetition value
+var Repeats = 12
+
+// Pin defines the hardware pin which we are sending bits on
+var Pin interface {
+	FastOut(gpio.Level)
+	Out(gpio.Level) error
+}
+
 func init() {
 	// Load all the drivers:
 	if _, err := host.Init(); err != nil {
@@ -17,18 +26,18 @@ func init() {
 
 }
 
-// Pin defines the hardware pin which we are sending bits on
-var Pin interface {
-	FastOut(gpio.Level)
-	Out(gpio.Level) error
-}
-
 var state gpio.Level
 
-// ShipPayload sends what i believe is Manchester encoding
+// ShipPayload uses the default repeats value
+// and calls ShipPayloadRepeat so the caller doesn't have to care
+func ShipPayload(input []byte) error {
+	return ShipPayloadRepeat(input, Repeats)
+}
+
+// ShipPayloadRepeat sends what i believe is Manchester encoding
 // at about 1200 baud - i just used my hands on these functions
 // until their output looked like a reference trace on a scope :)
-func ShipPayload(input []byte, repeat int) error {
+func ShipPayloadRepeat(input []byte, repeat int) error {
 
 	// ensure we start off low
 	state = gpio.Low
