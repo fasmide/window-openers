@@ -18,7 +18,13 @@ Get yours here https://www.aliexpress.com/item/Chain-Supply-Electric-Window-Open
 
 Start off by wiring everything up, the window-opener to the included wall controller and the wall controller to the mains - you should now be able to open and close the chain. 
 
+![wall controller pinout](https://github.com/fasmide/window-openers/raw/master/re/wall-controller-pinout.png)
+
+The motor polarity don't matter and you can change it later if `open` closes instead of opening.
+
 Next up, pull the included remote apart and figure out where the DATA pin is going from the MCU to the 433MHz radio - it's easy to spot - cut it somewhere and prepare 3 leads - one for ground, one for power and one for DATA into the radio. Hook these up to the raspberry pi
+
+![remote hack](https://github.com/fasmide/window-openers/raw/master/re/remote-hack.png)
 
 Btw - I think any 433MHz transmitter should be able to work just fine - please let me know. I don't know much about sending radio signals but my research leads me to believe what we are dealing with is Manchester encoded ASK/OOK at about 1200 baud.
 
